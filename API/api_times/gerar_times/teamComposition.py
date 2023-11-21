@@ -2,7 +2,7 @@ import random
 import pandas as pd
 from tabulate import tabulate as tb
 
-path='/Users/fcarlos/Documents/Projetos-Git/API/api_times/gerar_times/dados.xlsx'
+path='/Users/fcarlos/Documents/Projetos-Git/hc-team-composition/API/api_times/gerar_times/dados.xlsx'
 
 def gerar_time(tamanho):
     dados = pd.read_excel(path).to_dict(orient='records')
@@ -114,26 +114,26 @@ def selecionar_melhor_time(time_inicial, times_expandidos):
     return melhor_time
 
 
-time_inicial = gerar_time(5)
-melhor_solucao = time_inicial
-melhor_indice = avaliar_balanceamento([melhor_solucao])[0]
+def executar_algoritmo(tamanho):
+    time_inicial = gerar_time(tamanho)
+    melhor_solucao = time_inicial
+    melhor_indice = avaliar_balanceamento([melhor_solucao])[0]
 
-for i in range(1, 1000):
-    print(f"Iteração {i}")
-    times_expandidos = expandir_vizinhanca(melhor_solucao)
-    melhor_time = selecionar_melhor_time(melhor_solucao, times_expandidos)
-    novo_indice = avaliar_balanceamento([melhor_time])[0]
-    if novo_indice > melhor_indice:
-        melhor_solucao = melhor_time
-        melhor_indice = novo_indice
-        print(f"Melhor solução encontrada: {tb(melhor_solucao, headers=['Nome', 'Área', 'Nível', 'Linguagem'])}")
-        print(f"Valor de avaliação da melhor solução: {melhor_indice}")
-    else:
-        print("Nenhuma melhoria encontrada")
+    for i in range(1, 1000):
+        print(f"Iteração {i}")
+        times_expandidos = expandir_vizinhanca(melhor_solucao)
+        melhor_time = selecionar_melhor_time(melhor_solucao, times_expandidos)
+        novo_indice = avaliar_balanceamento([melhor_time])[0]
+        if novo_indice > melhor_indice:
+            melhor_solucao = melhor_time
+            melhor_indice = novo_indice
+            print(f"Melhor solução encontrada: {tb(melhor_solucao, headers=['Nome', 'Área', 'Nível', 'Linguagem'])}")
+            print(f"Valor de avaliação da melhor solução: {melhor_indice}")
+        else:
+            print("Nenhuma melhoria encontrada")
 
-print(f"Melhor solução global encontrada: {tb(melhor_solucao, headers=['Nome', 'Área', 'Nível', 'Linguagem'])}")
-print(f"Valor de avaliação da melhor solução: {melhor_indice}")
-
-
+    print(f"Melhor solução global encontrada: {tb(melhor_solucao, headers=['Nome', 'Área', 'Nível', 'Linguagem'])}")
+    print(f"Valor de avaliação da melhor solução: {melhor_indice}")
+    return melhor_solucao, melhor_indice
 
 
